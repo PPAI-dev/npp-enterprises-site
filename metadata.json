@@ -1,0 +1,8 @@
+{
+  "name": "NPP Enterprises, LLC",
+  "description": "NPP Enterprises, LLC - Premium custom home construction, remodels, windows, doors, and site prep across Florida's Gulf Coast (St. Pete to Ft. Myers) since 1997.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
