@@ -107,7 +107,7 @@ const CustomCursor = () => {
 
 // Premium Construction Images
 const IMAGES = {
-  logo: "https://storage.googleapis.com/databot-public/6838a536-f0ca-4c8d-8a58-5d1f85cf31e1/npp_logo.png", // NPP Enterprises Logo
+  logo: "/npp-logo.png", // NPP Enterprises Logo
   hero: "https://images.unsplash.com/photo-1600585154340-be6199f7a096?auto=format&fit=crop&q=80&w=2070", // Luxury Coastal Home
   customHome: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2075",
   remodel: "https://images.unsplash.com/photo-1556912177-859406b748ce?auto=format&fit=crop&q=80&w=2070",
@@ -129,7 +129,7 @@ const Logo = ({ className = "h-14 w-auto object-contain" }: { className?: string
   return (
     <div className="flex items-center">
       <img 
-        src="https://storage.googleapis.com/databot-public/6838a536-f0ca-4c8d-8a58-5d1f85cf31e1/npp_logo.png"
+        src="/npp-logo.png"
         alt="NPP Enterprises"
         className={className}
         referrerPolicy="no-referrer"
@@ -351,13 +351,13 @@ const Navbar = () => {
         <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center">
           <a href="/" className="group flex items-center">
             <img 
-              src="https://storage.googleapis.com/databot-public/6838a536-f0ca-4c8d-8a58-5d1f85cf31e1/npp_logo.png"
+              src="/npp-logo.png"
               alt="NPP Enterprises"
-              className="h-14 w-auto object-contain"
+              className="h-24 w-auto object-contain"
             />
           </a>
 
-          <div className="hidden lg:flex items-center space-x-8 text-[12px] font-mono font-bold text-brand-navy uppercase tracking-widest leading-none">
+          <div className="hidden lg:flex items-center space-x-8 text-[14px] font-mono font-bold text-brand-navy uppercase tracking-widest leading-none">
             <button onClick={() => scrollTo('hero')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Home</button>
             <button onClick={() => scrollTo('about')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">About</button>
             <button onClick={() => scrollTo('services')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Services</button>
