@@ -353,11 +353,11 @@ const Navbar = () => {
             <img 
               src="/npp-logo.png"
               alt="NPP Enterprises"
-              className="h-24 w-auto object-contain"
+              className="h-16 w-auto object-contain"
             />
           </a>
 
-          <div className="hidden lg:flex items-center space-x-8 text-[14px] font-mono font-bold text-brand-navy uppercase tracking-widest leading-none">
+          <div className="hidden lg:flex items-center space-x-8 text-[12px] font-mono font-bold text-brand-navy uppercase tracking-widest leading-none">
             <button onClick={() => scrollTo('hero')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Home</button>
             <button onClick={() => scrollTo('about')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">About</button>
             <button onClick={() => scrollTo('services')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Services</button>
@@ -956,5 +956,7 @@ export default function App() {
     </div>
   );
 }
+
+
 
 
