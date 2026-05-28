@@ -901,14 +901,7 @@ export default function App() {
               className="bg-white p-10 sm:p-14 rounded-2xl shadow-2xl relative z-10"
             >
                <h3 className="text-4xl font-display font-bold text-brand-navy mb-10 text-center tracking-tight">Request a Quote</h3>
-               <div className="w-full min-h-[600px] overflow-hidden bg-slate-50 rounded-xl relative">
-                  <div className="absolute inset-0 flex items-center justify-center p-0">
-                    <iframe 
-                      src="https://link.msgsndr.com/widget/form/SajhDORVof28GfK9p71D" 
-                      style={{ width: '100%', height: '100%', border: 'none' }}
-                    ></iframe>
-                  </div>
-               </div>
+               <form className="space-y-4"><div className="grid grid-cols-2 gap-4"><input type="text" placeholder="First Name" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" /><input type="text" placeholder="Last Name" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" /></div><div className="grid grid-cols-2 gap-4"><input type="email" placeholder="Email Address" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" /><input type="tel" placeholder="Phone Number" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" /></div><select className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-500 focus:border-brand-navy outline-none transition-colors rounded-lg"><option>Select Service</option><option>Custom Home</option><option>Remodel</option><option>Window Install</option><option>Door Install</option><option>Site Prep</option><option>Commercial</option></select><input type="text" placeholder="Project Zip Code" className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" /><textarea placeholder="Tell us about your project..." rows={4} className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg resize-none" /><div className="flex items-start space-x-3 py-2"><input type="checkbox" className="mt-1" id="terms2" /><label htmlFor="terms2" className="text-[10px] text-slate-400 leading-tight">I agree to receive communications via SMS or email regarding my inquiry. Message and data rates may apply.</label></div><button type="submit" className="btn-primary w-full py-5 text-lg">GET A QUOTE</button></form>
             </motion.div>
           </div>
         </div>
@@ -963,4 +956,5 @@ export default function App() {
     </div>
   );
 }
+
 
