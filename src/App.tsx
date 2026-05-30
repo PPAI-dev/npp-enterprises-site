@@ -479,12 +479,12 @@ const LegalPage = ({ title, sections, onBack }: { title: string; sections: { tit
 };
 
 // ─── Consent Checkbox Label ────────────────────────────────────────────────────
-const ConsentLabel = ({ htmlFor, onNavigate }: { htmlFor: string; onNavigate: (page: 'privacy' | 'terms') => void }) => (
+const ConsentLabel = ({ htmlFor }: { htmlFor: string }) => (
   <label htmlFor={htmlFor} className="text-[10px] text-slate-400 leading-tight">
-    By submitting, I authorize NPP ENTERPRISES, INC. to send SMS messages to the number provided. Msg frequency varies. Msg & data rates may apply. Not a condition of purchase. Reply STOP to unsubscribe, HELP for help.{' '}
-    <button type="button" onClick={() => onNavigate('privacy')} className="underline hover:text-brand-orange transition-colors">Privacy Policy</button>
+    By submitting, I authorize NPP ENTERPRISES, INC. to send informational, transactional, and promotional SMS messages to the number provided. Msg frequency varies. Msg & data rates may apply. Not a condition of purchase. Reply STOP to unsubscribe, HELP for help.{' '}
+    <a href="/privacy-policy.html" target="_blank" className="underline hover:text-brand-orange transition-colors">Privacy Policy</a>
     {' '}&amp;{' '}
-    <button type="button" onClick={() => onNavigate('terms')} className="underline hover:text-brand-orange transition-colors">Terms of Service</button>.
+    <a href="/terms-of-service.html" target="_blank" className="underline hover:text-brand-orange transition-colors">Terms of Service</a>.
   </label>
 );
 
