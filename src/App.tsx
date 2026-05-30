@@ -543,7 +543,7 @@ export default function App() {
                 <span className="text-gradient-orange">Building.</span>
               </h1>
               <p className="text-slate-300 text-lg sm:text-xl max-w-xl mb-12 font-mono leading-relaxed opacity-90 border-l-2 border-brand-orange/30 pl-6">
-                27+ years of structural precision. 20+ projects completed across the Gulf Coast. Licensed, insured, and built for Florida.
+                27+ years of structural precision. Hundreds of projects completed across the Gulf Coast. Licensed, insured, and built for Florida.
               </p>
             </motion.div>
 
