@@ -21,78 +21,65 @@ import {
   X,
   ArrowUp
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
+const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/pa9CpOz9wmZOEjLFnwC6/webhook-trigger/308deef3-0602-489a-983f-3f95e9aa40fd";
+
+const submitToGHL = async (data: Record<string, string>) => {
+  const res = await fetch(GHL_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Submission failed");
+};
 
 const useMousePosition = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+    const handleMouseMove = (e: MouseEvent) => setMousePosition({ x: e.clientX, y: e.clientY });
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-
   return mousePosition;
 };
 
 const CustomCursor = () => {
   const { x, y } = useMousePosition();
   const [isHovering, setIsHovering] = useState(false);
-
   useEffect(() => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
-        target.tagName === 'BUTTON' ||
-        target.tagName === 'A' ||
-        target.closest('button') ||
-        target.closest('a') ||
+      setIsHovering(
+        target.tagName === 'BUTTON' || target.tagName === 'A' ||
+        !!target.closest('button') || !!target.closest('a') ||
         target.classList.contains('cursor-pointer')
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
+      );
     };
     window.addEventListener('mouseover', handleMouseOver);
     return () => window.removeEventListener('mouseover', handleMouseOver);
   }, []);
-
   return (
     <>
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9999] mix-blend-difference hidden lg:block"
         animate={{ x: x - 16, y: y - 16, scale: isHovering ? 2.5 : 1 }}
         transition={{ type: "spring", damping: 30, stiffness: 250, mass: 0.5 }}
-        style={{
-          background: "radial-gradient(circle, rgba(245,166,35,1) 0%, rgba(11,19,48,1) 100%)",
-          opacity: 0.8,
-        }}
+        style={{ background: "radial-gradient(circle, rgba(245,166,35,1) 0%, rgba(11,19,48,1) 100%)", opacity: 0.8 }}
       />
       <motion.div
         className="fixed top-0 left-0 w-80 h-80 rounded-full pointer-events-none z-[1] opacity-20 hidden lg:block"
         animate={{ x: x - 160, y: y - 160 }}
         transition={{ type: "tween", ease: "backOut", duration: 0.5 }}
-        style={{
-          background: "radial-gradient(circle, rgba(245,166,35,0.4) 0%, rgba(245,166,35,0) 70%)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(245,166,35,0.4) 0%, rgba(245,166,35,0) 70%)" }}
       />
     </>
   );
 };
 
-// Premium Construction Images
 const IMAGES = {
   logo: "/npp-logo.png",
   hero: "https://images.unsplash.com/photo-1600585154340-be6199f7a096?auto=format&fit=crop&q=80&w=2070",
-  customHome: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2075",
-  remodel: "https://images.unsplash.com/photo-1556912177-859406b748ce?auto=format&fit=crop&q=80&w=2070",
-  windows: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=2070",
-  doors: "https://images.unsplash.com/photo-1506377247377-2a5b3b0ca7df?auto=format&fit=crop&q=80&w=2070",
-  sitePrep: "https://images.unsplash.com/photo-1541919329513-35f7af297129?auto=format&fit=crop&q=80&w=2070",
-  commercial: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070",
 };
 
 const Logo = ({ className = "h-14 w-auto object-contain" }: { className?: string }) => (
@@ -107,21 +94,18 @@ const scrollTo = (id: string) => {
     const offset = 140;
     const bodyRect = document.body.getBoundingClientRect().top;
     const elementRect = element.getBoundingClientRect().top;
-    const elementPosition = elementRect - bodyRect;
-    const offsetPosition = elementPosition - offset;
+    const offsetPosition = (elementRect - bodyRect) - offset;
     window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
   }
 };
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
     const toggleVisibility = () => setIsVisible(window.scrollY > 500);
     window.addEventListener('scroll', toggleVisibility);
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -143,20 +127,18 @@ const BackToTop = () => {
 const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms') => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       <div className="announcement-bar animate-pulse text-[10px] md:text-xs font-bold">
         ESTABLISHED 1997 | CUSTOM HOMES | REMODELS | WINDOWS | DOORS | SITE PREP | LICENSED & INSURED
       </div>
       <div className="bg-white text-slate-600 py-3 border-b border-slate-100 hidden lg:block">
-        <div className="max-w-[1400px] mx-auto px-6 h-10 flex justify-between items-center text-[11px] font-medium border-b border-transparent">
+        <div className="max-w-[1400px] mx-auto px-6 h-10 flex justify-between items-center text-[11px] font-medium">
           <div className="flex items-center space-x-12">
             <div className="flex items-center space-x-4">
               <Phone size={12} className="text-brand-navy" />
@@ -204,9 +186,7 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
               <button onClick={() => { scrollTo('hero'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">Home</button>
               <button onClick={() => { scrollTo('about'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">About Us</button>
               <button onClick={() => { scrollTo('services'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">Services</button>
-              <button onClick={() => { scrollTo('quote'); setIsMobileMenuOpen(false); }} className="btn-primary w-full text-center py-4">
-                Free Consultation
-              </button>
+              <button onClick={() => { scrollTo('quote'); setIsMobileMenuOpen(false); }} className="btn-primary w-full text-center py-4">Free Consultation</button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -217,42 +197,12 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
 
 // ─── Combined Work Section ─────────────────────────────────────────────────────
 const COMBINED_CARDS = [
-  {
-    icon: Home,
-    title: "Custom Homes",
-    description: "Luxury custom homes engineered for the Florida coastline.",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2075",
-  },
-  {
-    icon: Layers,
-    title: "Remodels",
-    description: "High-end kitchen, bath, and whole-home transformations.",
-    image: "https://images.unsplash.com/photo-1556912177-859406b748ce?auto=format&fit=crop&q=80&w=2070",
-  },
-  {
-    icon: Maximize,
-    title: "Windows",
-    description: "Impact-rated window systems built for Florida conditions.",
-    image: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=2070",
-  },
-  {
-    icon: DoorOpen,
-    title: "Doors",
-    description: "Premium entry and sliding glass systems for indoor-outdoor living.",
-    image: "https://images.unsplash.com/photo-1506377247377-2a5b3b0ca7df?auto=format&fit=crop&q=80&w=2070",
-  },
-  {
-    icon: Truck,
-    title: "Site Prep",
-    description: "Expert clearing, grading, and site engineering for complex builds.",
-    image: "https://images.unsplash.com/photo-1541919329513-35f7af297129?auto=format&fit=crop&q=80&w=2070",
-  },
-  {
-    icon: Building2,
-    title: "Commercial",
-    description: "Structural services and build-outs for commercial environments.",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070",
-  },
+  { icon: Home, title: "Custom Homes", description: "Luxury custom homes engineered for the Florida coastline.", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2075" },
+  { icon: Layers, title: "Remodels", description: "High-end kitchen, bath, and whole-home transformations.", image: "https://images.unsplash.com/photo-1556912177-859406b748ce?auto=format&fit=crop&q=80&w=2070" },
+  { icon: Maximize, title: "Windows", description: "Impact-rated window systems built for Florida conditions.", image: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=2070" },
+  { icon: DoorOpen, title: "Doors", description: "Premium entry and sliding glass systems for indoor-outdoor living.", image: "https://images.unsplash.com/photo-1506377247377-2a5b3b0ca7df?auto=format&fit=crop&q=80&w=2070" },
+  { icon: Truck, title: "Site Prep", description: "Expert clearing, grading, and site engineering for complex builds.", image: "https://images.unsplash.com/photo-1541919329513-35f7af297129?auto=format&fit=crop&q=80&w=2070" },
+  { icon: Building2, title: "Commercial", description: "Structural services and build-outs for commercial environments.", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070" },
 ];
 
 const WorkSection = () => (
@@ -263,8 +213,7 @@ const WorkSection = () => (
         <div>
           <div className="technical-tag mb-6">Work Index</div>
           <h3 className="text-5xl sm:text-8xl font-display font-black text-white tracking-tighter italic uppercase underline decoration-brand-orange/30 decoration-8 underline-offset-[-8px]">
-            OUR <br />
-            <span className="text-gradient-orange">WORK.</span>
+            OUR <br /><span className="text-gradient-orange">WORK.</span>
           </h3>
         </div>
         <div className="mt-8 md:mt-0 text-right">
@@ -283,11 +232,7 @@ const WorkSection = () => (
             className="group relative overflow-hidden bg-white/5 border border-white/10 hover:border-brand-orange transition-all duration-500"
           >
             <div className="aspect-[4/3] overflow-hidden relative">
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-              />
+              <img src={image} alt={title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
               <div className="absolute inset-0 bg-brand-navy/40 group-hover:bg-brand-navy/10 transition-colors duration-700" />
               <div className="absolute top-4 left-4 bg-brand-orange p-3 text-white shadow-[3px_3px_0px_rgba(11,19,48,1)]">
                 <Icon size={20} />
@@ -306,6 +251,146 @@ const WorkSection = () => (
     </div>
   </section>
 );
+
+// ─── Consent Label ─────────────────────────────────────────────────────────────
+const ConsentLabel = ({ htmlFor }: { htmlFor: string }) => (
+  <label htmlFor={htmlFor} className="text-[10px] text-slate-400 leading-tight">
+    By submitting, I authorize NPP ENTERPRISES, INC. to send informational, transactional, and promotional SMS messages to the number provided. Msg frequency varies. Msg & data rates may apply. Not a condition of purchase. Reply STOP to unsubscribe, HELP for help.{' '}
+    <a href="/privacy-policy.html" target="_blank" className="underline hover:text-brand-orange transition-colors">Privacy Policy</a>
+    {' '}&amp;{' '}
+    <a href="/terms-of-service.html" target="_blank" className="underline hover:text-brand-orange transition-colors">Terms of Service</a>.
+  </label>
+);
+
+// ─── Forms ─────────────────────────────────────────────────────────────────────
+const inputClass = "bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg";
+
+const HeroForm = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = e.currentTarget;
+    const data = {
+      firstName: (f.querySelector('[name="firstName"]') as HTMLInputElement).value,
+      lastName: (f.querySelector('[name="lastName"]') as HTMLInputElement).value,
+      email: (f.querySelector('[name="email"]') as HTMLInputElement).value,
+      phone: (f.querySelector('[name="phone"]') as HTMLInputElement).value,
+      service: (f.querySelector('[name="service"]') as HTMLSelectElement).value,
+      zip: (f.querySelector('[name="zip"]') as HTMLInputElement).value,
+      source: "Hero Form",
+    };
+    setSubmitting(true);
+    try {
+      await submitToGHL(data);
+      alert("Thanks! We'll follow up with you today.");
+      formRef.current?.reset();
+    } catch {
+      alert("Something went wrong. Please call us directly at 330.509.1506.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="form-box">
+      <h3 className="text-3xl font-display font-bold text-brand-navy mb-2 tracking-tight">Get Your Free Consultation</h3>
+      <p className="text-slate-500 text-sm mb-8 font-medium">Tell us about your project, we'll follow up today.</p>
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <input name="firstName" type="text" placeholder="First Name" required className={inputClass} />
+          <input name="lastName" type="text" placeholder="Last Name" required className={inputClass} />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <input name="email" type="email" placeholder="Email Address" required className={inputClass} />
+          <input name="phone" type="tel" placeholder="Phone Number" required className={inputClass} />
+        </div>
+        <select name="service" className={`w-full ${inputClass} text-slate-500`}>
+          <option value="">Select Service</option>
+          <option>Custom Home</option>
+          <option>Remodel</option>
+          <option>Window Install</option>
+          <option>Door Install</option>
+          <option>Site Prep</option>
+          <option>Commercial</option>
+        </select>
+        <input name="zip" type="text" placeholder="Project Zip Code" className={`w-full ${inputClass}`} />
+        <div className="flex items-start space-x-3 py-2">
+          <input type="checkbox" className="mt-1" id="terms" required />
+          <ConsentLabel htmlFor="terms" />
+        </div>
+        <button type="submit" disabled={submitting} className="btn-primary w-full py-5 text-lg disabled:opacity-60">
+          {submitting ? "SENDING..." : "GET A QUOTE"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+const QuoteForm = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = e.currentTarget;
+    const data = {
+      firstName: (f.querySelector('[name="firstName"]') as HTMLInputElement).value,
+      lastName: (f.querySelector('[name="lastName"]') as HTMLInputElement).value,
+      email: (f.querySelector('[name="email"]') as HTMLInputElement).value,
+      phone: (f.querySelector('[name="phone"]') as HTMLInputElement).value,
+      service: (f.querySelector('[name="service"]') as HTMLSelectElement).value,
+      zip: (f.querySelector('[name="zip"]') as HTMLInputElement).value,
+      message: (f.querySelector('[name="message"]') as HTMLTextAreaElement).value,
+      source: "Quote Form",
+    };
+    setSubmitting(true);
+    try {
+      await submitToGHL(data);
+      alert("Thanks! We'll follow up with you today.");
+      formRef.current?.reset();
+    } catch {
+      alert("Something went wrong. Please call us directly at 330.509.1506.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <>
+      <h3 className="text-4xl font-display font-bold text-brand-navy mb-10 text-center tracking-tight">Request a Quote</h3>
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <input name="firstName" type="text" placeholder="First Name" required className={inputClass} />
+          <input name="lastName" type="text" placeholder="Last Name" required className={inputClass} />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <input name="email" type="email" placeholder="Email Address" required className={inputClass} />
+          <input name="phone" type="tel" placeholder="Phone Number" required className={inputClass} />
+        </div>
+        <select name="service" className={`w-full ${inputClass} text-slate-500`}>
+          <option value="">Select Service</option>
+          <option>Custom Home</option>
+          <option>Remodel</option>
+          <option>Window Install</option>
+          <option>Door Install</option>
+          <option>Site Prep</option>
+          <option>Commercial</option>
+        </select>
+        <input name="zip" type="text" placeholder="Project Zip Code" className={`w-full ${inputClass}`} />
+        <textarea name="message" placeholder="Tell us about your project..." rows={4} className={`w-full ${inputClass} resize-none`} />
+        <div className="flex items-start space-x-3 py-2">
+          <input type="checkbox" className="mt-1" id="terms2" required />
+          <ConsentLabel htmlFor="terms2" />
+        </div>
+        <button type="submit" disabled={submitting} className="btn-primary w-full py-5 text-lg disabled:opacity-60">
+          {submitting ? "SENDING..." : "GET A QUOTE"}
+        </button>
+      </form>
+    </>
+  );
+};
 
 // ─── Legal Page Sections ───────────────────────────────────────────────────────
 const PRIVACY_SECTIONS = [
@@ -360,16 +445,6 @@ const LegalPage = ({ title, sections, onBack }: { title: string; sections: { tit
   );
 };
 
-// ─── Consent Checkbox Label ────────────────────────────────────────────────────
-const ConsentLabel = ({ htmlFor }: { htmlFor: string }) => (
-  <label htmlFor={htmlFor} className="text-[10px] text-slate-400 leading-tight">
-    By submitting, I authorize NPP ENTERPRISES, INC. to send informational, transactional, and promotional SMS messages to the number provided. Msg frequency varies. Msg & data rates may apply. Not a condition of purchase. Reply STOP to unsubscribe, HELP for help.{' '}
-    <a href="/privacy-policy.html" target="_blank" className="underline hover:text-brand-orange transition-colors">Privacy Policy</a>
-    {' '}&amp;{' '}
-    <a href="/terms-of-service.html" target="_blank" className="underline hover:text-brand-orange transition-colors">Terms of Service</a>.
-  </label>
-);
-
 // ─── Main App ──────────────────────────────────────────────────────────────────
 export default function App() {
   const { scrollY } = useScroll();
@@ -381,7 +456,6 @@ export default function App() {
   if (currentPage === 'privacy') {
     return <LegalPage title="Privacy Policy" sections={PRIVACY_SECTIONS} onBack={() => setCurrentPage('home')} />;
   }
-
   if (currentPage === 'terms') {
     return <LegalPage title="Terms of Service" sections={TERMS_SECTIONS} onBack={() => setCurrentPage('home')} />;
   }
@@ -404,43 +478,14 @@ export default function App() {
                 <span className="text-brand-orange text-[10px] font-mono font-bold tracking-[0.4em] uppercase">Excellence in Craftsmanship</span>
               </div>
               <h1 className="text-5xl sm:text-7xl xl:text-9xl font-display font-black text-white tracking-tighter leading-[0.9] mb-10 uppercase italic">
-                Custom <br />
-                <span className="text-gradient-orange">Building.</span>
+                Custom <br /><span className="text-gradient-orange">Building.</span>
               </h1>
               <p className="text-slate-300 text-lg sm:text-xl max-w-xl mb-12 font-mono leading-relaxed opacity-90 border-l-2 border-brand-orange/30 pl-6">
                 27+ years of structural precision. Hundreds of projects completed across the Gulf Coast. Licensed, insured, and built for Florida.
               </p>
             </motion.div>
-
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
-              <div className="form-box">
-                <h3 className="text-3xl font-display font-bold text-brand-navy mb-2 tracking-tight">Get Your Free Consultation</h3>
-                <p className="text-slate-500 text-sm mb-8 font-medium">Tell us about your project, we'll follow up today.</p>
-                <form className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <input type="text" placeholder="First Name" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                    <input type="text" placeholder="Last Name" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <input type="email" placeholder="Email Address" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                    <input type="tel" placeholder="Phone Number" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                  </div>
-                  <select className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-500 focus:border-brand-navy outline-none transition-colors rounded-lg">
-                    <option>Select Service</option>
-                    <option>Custom Home</option>
-                    <option>Remodel</option>
-                    <option>Window Install</option>
-                    <option>Door Install</option>
-                    <option>Site Prep</option>
-                  </select>
-                  <input type="text" placeholder="Project Zip Code" className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                  <div className="flex items-start space-x-3 py-2">
-                    <input type="checkbox" className="mt-1" id="terms" />
-                    <ConsentLabel htmlFor="terms" />
-                  </div>
-                  <button type="submit" className="btn-primary w-full py-5 text-lg">GET A QUOTE</button>
-                </form>
-              </div>
+              <HeroForm />
             </motion.div>
           </div>
         </div>
@@ -482,7 +527,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Combined Work Section (Services + Gallery merged) */}
+      {/* Combined Work Section */}
       <WorkSection />
 
       {/* Why Choose Us */}
@@ -494,28 +539,26 @@ export default function App() {
               <h2 className="text-white text-5xl sm:text-7xl font-display font-black leading-[0.9] mb-12 uppercase italic tracking-tighter">
                 Why NPP <br /><span className="text-brand-orange">Wins.</span>
               </h2>
-              <div className="space-y-8">
-                <div className="grid sm:grid-cols-2 gap-8">
-                  <div className="border-l border-white/20 pl-6 py-2">
-                    <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">01 / Experience</p>
-                    <p className="text-white text-xl font-display font-bold uppercase">Since 1997</p>
-                    <p className="text-slate-400 text-sm mt-2">Decades of Gulf Coast construction experience.</p>
-                  </div>
-                  <div className="border-l border-white/20 pl-6 py-2">
-                    <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">02 / Guarantee</p>
-                    <p className="text-white text-xl font-display font-bold uppercase">Pay When Thrilled</p>
-                    <p className="text-slate-400 text-sm mt-2">Zero risk deployment. Final sign-off required.</p>
-                  </div>
-                  <div className="border-l border-white/20 pl-6 py-2">
-                    <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">03 / Reliability</p>
-                    <p className="text-white text-xl font-display font-bold uppercase">On-Time Pact</p>
-                    <p className="text-slate-400 text-sm mt-2">Strict timelines. Documented accuracy.</p>
-                  </div>
-                  <div className="border-l border-white/20 pl-6 py-2">
-                    <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">04 / Region</p>
-                    <p className="text-white text-xl font-display font-bold uppercase">Florida Built</p>
-                    <p className="text-slate-400 text-sm mt-2">Transferable 5-year structural warranty.</p>
-                  </div>
+              <div className="grid sm:grid-cols-2 gap-8">
+                <div className="border-l border-white/20 pl-6 py-2">
+                  <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">01 / Experience</p>
+                  <p className="text-white text-xl font-display font-bold uppercase">Since 1997</p>
+                  <p className="text-slate-400 text-sm mt-2">Decades of Gulf Coast construction experience.</p>
+                </div>
+                <div className="border-l border-white/20 pl-6 py-2">
+                  <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">02 / Guarantee</p>
+                  <p className="text-white text-xl font-display font-bold uppercase">Pay When Thrilled</p>
+                  <p className="text-slate-400 text-sm mt-2">Zero risk deployment. Final sign-off required.</p>
+                </div>
+                <div className="border-l border-white/20 pl-6 py-2">
+                  <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">03 / Reliability</p>
+                  <p className="text-white text-xl font-display font-bold uppercase">On-Time Pact</p>
+                  <p className="text-slate-400 text-sm mt-2">Strict timelines. Documented accuracy.</p>
+                </div>
+                <div className="border-l border-white/20 pl-6 py-2">
+                  <p className="text-brand-orange font-mono text-xs tracking-widest uppercase mb-3 font-bold">04 / Region</p>
+                  <p className="text-white text-xl font-display font-bold uppercase">Florida Built</p>
+                  <p className="text-slate-400 text-sm mt-2">Transferable 5-year structural warranty.</p>
                 </div>
               </div>
               <div className="mt-16 pt-10 border-t border-white/10">
@@ -619,35 +662,8 @@ export default function App() {
                 </div>
               </div>
             </motion.div>
-
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }} className="bg-white p-10 sm:p-14 rounded-2xl shadow-2xl relative z-10">
-              <h3 className="text-4xl font-display font-bold text-brand-navy mb-10 text-center tracking-tight">Request a Quote</h3>
-              <form className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="First Name" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                  <input type="text" placeholder="Last Name" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <input type="email" placeholder="Email Address" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                  <input type="tel" placeholder="Phone Number" className="bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                </div>
-                <select className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-500 focus:border-brand-navy outline-none transition-colors rounded-lg">
-                  <option>Select Service</option>
-                  <option>Custom Home</option>
-                  <option>Remodel</option>
-                  <option>Window Install</option>
-                  <option>Door Install</option>
-                  <option>Site Prep</option>
-                  <option>Commercial</option>
-                </select>
-                <input type="text" placeholder="Project Zip Code" className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
-                <textarea placeholder="Tell us about your project..." rows={4} className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg resize-none" />
-                <div className="flex items-start space-x-3 py-2">
-                  <input type="checkbox" className="mt-1" id="terms2" />
-                  <ConsentLabel htmlFor="terms2" />
-                </div>
-                <button type="submit" className="btn-primary w-full py-5 text-lg">GET A QUOTE</button>
-              </form>
+              <QuoteForm />
             </motion.div>
           </div>
         </div>
