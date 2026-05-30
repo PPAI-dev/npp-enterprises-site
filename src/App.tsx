@@ -15,17 +15,13 @@ import {
   DoorOpen, 
   Truck, 
   Building2,
-  ArrowRight,
   Phone,
   Mail,
   Menu,
   X,
-  ChevronRight,
-  ChevronLeft,
-  MessageSquare,
   ArrowUp
 } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 const useMousePosition = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -34,7 +30,6 @@ const useMousePosition = () => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
@@ -50,9 +45,9 @@ const CustomCursor = () => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
-        target.tagName === 'BUTTON' || 
-        target.tagName === 'A' || 
-        target.closest('button') || 
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'A' ||
+        target.closest('button') ||
         target.closest('a') ||
         target.classList.contains('cursor-pointer')
       ) {
@@ -61,7 +56,6 @@ const CustomCursor = () => {
         setIsHovering(false);
       }
     };
-
     window.addEventListener('mouseover', handleMouseOver);
     return () => window.removeEventListener('mouseover', handleMouseOver);
   }, []);
@@ -70,17 +64,8 @@ const CustomCursor = () => {
     <>
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9999] mix-blend-difference hidden lg:block"
-        animate={{
-          x: x - 16,
-          y: y - 16,
-          scale: isHovering ? 2.5 : 1,
-        }}
-        transition={{
-          type: "spring",
-          damping: 30,
-          stiffness: 250,
-          mass: 0.5,
-        }}
+        animate={{ x: x - 16, y: y - 16, scale: isHovering ? 2.5 : 1 }}
+        transition={{ type: "spring", damping: 30, stiffness: 250, mass: 0.5 }}
         style={{
           background: "radial-gradient(circle, rgba(245,166,35,1) 0%, rgba(11,19,48,1) 100%)",
           opacity: 0.8,
@@ -88,15 +73,8 @@ const CustomCursor = () => {
       />
       <motion.div
         className="fixed top-0 left-0 w-80 h-80 rounded-full pointer-events-none z-[1] opacity-20 hidden lg:block"
-        animate={{
-          x: x - 160,
-          y: y - 160,
-        }}
-        transition={{
-          type: "tween",
-          ease: "backOut",
-          duration: 0.5,
-        }}
+        animate={{ x: x - 160, y: y - 160 }}
+        transition={{ type: "tween", ease: "backOut", duration: 0.5 }}
         style={{
           background: "radial-gradient(circle, rgba(245,166,35,0.4) 0%, rgba(245,166,35,0) 70%)",
         }}
@@ -115,134 +93,13 @@ const IMAGES = {
   doors: "https://images.unsplash.com/photo-1506377247377-2a5b3b0ca7df?auto=format&fit=crop&q=80&w=2070",
   sitePrep: "https://images.unsplash.com/photo-1541919329513-35f7af297129?auto=format&fit=crop&q=80&w=2070",
   commercial: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070",
-  gallery: [
-    "https://images.unsplash.com/photo-1600607687940-c52af0a09538?auto=format&fit=crop&q=80&w=2070",
-    "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=2070",
-    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=2070",
-    "https://images.unsplash.com/photo-1556912177-859406b748ce?auto=format&fit=crop&q=80&w=2070",
-    "https://images.unsplash.com/photo-1507089947368-19c1da977535?auto=format&fit=crop&q=80&w=2070",
-    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=2070",
-  ]
 };
 
-const Logo = ({ className = "h-14 w-auto object-contain" }: { className?: string }) => {
-  return (
-    <div className="flex items-center">
-      <img 
-        src="/npp-logo.png"
-        alt="NPP Enterprises"
-        className={className}
-        referrerPolicy="no-referrer"
-      />
-    </div>
-  );
-};
-
-const Lightbox = ({ 
-  images, 
-  index, 
-  onClose, 
-  onPrev, 
-  onNext 
-}: { 
-  images: string[], 
-  index: number | null, 
-  onClose: () => void,
-  onPrev: () => void,
-  onNext: () => void
-}) => {
-  useEffect(() => {
-    if (index !== null) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [index]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (index === null) return;
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') onPrev();
-      if (e.key === 'ArrowRight') onNext();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [index, onClose, onPrev, onNext]);
-
-  return (
-    <AnimatePresence>
-      {index !== null && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-dark/98 backdrop-blur-2xl p-4 md:p-12"
-        >
-          <div className="absolute inset-0 industrial-grid opacity-20 pointer-events-none" />
-          <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-[110]">
-            <div className="flex items-center space-x-6">
-              <Logo className="h-12" />
-              <div className="h-8 w-[1px] bg-white/10 hidden sm:block" />
-              <div className="hidden sm:flex flex-col">
-                <span className="text-[10px] font-bold text-brand-orange uppercase tracking-[0.2em]">Project Portfolio</span>
-                <span className="text-white font-display font-bold text-xs uppercase tracking-widest">Image {index + 1} / {images.length}</span>
-              </div>
-            </div>
-            <button 
-              onClick={onClose}
-              className="w-14 h-14 bg-white/5 border border-white/10 hover:border-brand-orange transition-colors flex items-center justify-center text-white group"
-            >
-              <X size={24} className="group-hover:rotate-90 transition-transform duration-500" />
-            </button>
-          </div>
-          <div className="relative w-full max-w-6xl aspect-[4/3] md:aspect-video flex items-center justify-center group/main">
-             <AnimatePresence mode="wait">
-               <motion.img
-                 key={index}
-                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                 exit={{ opacity: 0, scale: 1.1, y: -20 }}
-                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                 src={images[index]}
-                 className="w-full h-full object-contain shadow-2xl relative z-10 brightness-110"
-               />
-             </AnimatePresence>
-             <div className="absolute -left-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col space-y-2 text-brand-orange/20">
-               {[...Array(8)].map((_, i) => <div key={i} className="w-8 h-[2px] bg-current" />)}
-             </div>
-             <div className="absolute -right-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col space-y-2 text-brand-orange/20">
-               {[...Array(8)].map((_, i) => <div key={i} className="w-8 h-[2px] bg-current" />)}
-             </div>
-          </div>
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-4 md:px-12 flex justify-between pointer-events-none z-[110]">
-             <button 
-              onClick={onPrev}
-              className="pointer-events-auto w-16 h-24 bg-white/5 border-y border-r border-white/10 hover:border-tropical-teal hover:bg-tropical-teal/5 transition-all flex items-center justify-center text-white backdrop-blur-md group"
-             >
-               <ChevronLeft size={32} className="group-hover:-translate-x-2 transition-transform" />
-             </button>
-             <button 
-              onClick={onNext}
-              className="pointer-events-auto w-16 h-24 bg-white/5 border-y border-l border-white/10 hover:border-tropical-teal hover:bg-tropical-teal/5 transition-all flex items-center justify-center text-white backdrop-blur-md group"
-             >
-               <ChevronRight size={32} className="group-hover:translate-x-2 transition-transform" />
-             </button>
-          </div>
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-md px-12 flex space-x-2">
-            {images.map((_, i) => (
-              <div 
-                key={i} 
-                className={`h-1 flex-1 transition-all duration-500 ${i === index ? 'bg-brand-orange scale-y-150 shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'bg-white/10'}`}
-              />
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+const Logo = ({ className = "h-14 w-auto object-contain" }: { className?: string }) => (
+  <div className="flex items-center">
+    <img src="/npp-logo.png" alt="NPP Enterprises" className={className} referrerPolicy="no-referrer" />
+  </div>
+);
 
 const scrollTo = (id: string) => {
   const element = document.getElementById(id);
@@ -252,10 +109,7 @@ const scrollTo = (id: string) => {
     const elementRect = element.getBoundingClientRect().top;
     const elementPosition = elementRect - bodyRect;
     const offsetPosition = elementPosition - offset;
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    });
+    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
   }
 };
 
@@ -263,20 +117,10 @@ const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.scrollY > 500) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
+    const toggleVisibility = () => setIsVisible(window.scrollY > 500);
     window.addEventListener('scroll', toggleVisibility);
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <AnimatePresence>
@@ -285,7 +129,7 @@ const BackToTop = () => {
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
-          onClick={scrollToTop}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-10 right-10 z-[60] bg-brand-navy text-white p-4 shadow-[6px_6px_0px_rgba(245,166,35,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group"
           aria-label="Back to top"
         >
@@ -316,13 +160,15 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
           <div className="flex items-center space-x-12">
             <div className="flex items-center space-x-4">
               <Phone size={12} className="text-brand-navy" />
-              <div className="flex flex-col md:flex-row space-x-4">
-                <span className="text-slate-500 font-mono font-bold uppercase tracking-widest">Office: <a href="tel:3305091506" className="text-brand-navy">330.509.1506</a></span>
-              </div>
+              <span className="text-slate-500 font-mono font-bold uppercase tracking-widest">
+                Office: <a href="tel:3305091506" className="text-brand-navy">330.509.1506</a>
+              </span>
             </div>
             <div className="flex items-center space-x-2">
               <Mail size={12} className="text-brand-navy" />
-              <span className="font-mono font-bold uppercase tracking-widest"><a href="mailto:Andrewgrischow@nppent.com" className="text-brand-navy">Andrewgrischow@nppent.com</a></span>
+              <span className="font-mono font-bold uppercase tracking-widest">
+                <a href="mailto:Andrewgrischow@nppent.com" className="text-brand-navy">Andrewgrischow@nppent.com</a>
+              </span>
             </div>
           </div>
         </div>
@@ -336,7 +182,6 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
             <button onClick={() => scrollTo('hero')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Home</button>
             <button onClick={() => scrollTo('about')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">About</button>
             <button onClick={() => scrollTo('services')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Services</button>
-            <button onClick={() => scrollTo('gallery')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Portfolio</button>
             <button onClick={() => scrollTo('quote')} className="hover:text-brand-orange transition-colors cursor-pointer border-b-2 border-transparent hover:border-brand-orange pb-1">Contact</button>
           </div>
           <div className="hidden lg:flex items-center space-x-4">
@@ -359,7 +204,6 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
               <button onClick={() => { scrollTo('hero'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">Home</button>
               <button onClick={() => { scrollTo('about'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">About Us</button>
               <button onClick={() => { scrollTo('services'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">Services</button>
-              <button onClick={() => { scrollTo('gallery'); setIsMobileMenuOpen(false); }} className="text-lg font-black uppercase tracking-widest text-left text-white">Portfolio</button>
               <button onClick={() => { scrollTo('quote'); setIsMobileMenuOpen(false); }} className="btn-primary w-full text-center py-4">
                 Free Consultation
               </button>
@@ -371,58 +215,96 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
   );
 };
 
-const TrustCard = ({ icon: Icon, title, sub }: any) => (
-  <motion.div 
-    whileHover={{ x: 5 }}
-    className="flex items-center space-x-6 p-10 premium-card group cursor-default relative overflow-hidden"
-  >
-    <div className="absolute top-0 right-0 p-2 text-brand-navy/10 font-mono text-[8px] uppercase tracking-widest">MODULE_ID: TR-0{Math.floor(Math.random() * 9)}</div>
-    <div className="text-white bg-brand-navy p-5 rounded-none transition-all duration-500 group-hover:bg-brand-orange group-hover:text-brand-dark shadow-[4px_4px_0px_rgba(245,166,35,1)] group-hover:shadow-none translate-x-[-2px] translate-y-[-2px]">
-      <Icon size={28} />
-    </div>
-    <div>
-      <p className="text-brand-navy font-display font-black text-2xl uppercase italic leading-tight mb-1 group-hover:text-brand-orange transition-colors tracking-tighter">{title}</p>
-      <p className="text-slate-500 text-[10px] uppercase font-mono font-bold tracking-[0.2em]">{sub}</p>
-    </div>
-  </motion.div>
-);
+// ─── Combined Work Section ─────────────────────────────────────────────────────
+const COMBINED_CARDS = [
+  {
+    icon: Home,
+    title: "Custom Homes",
+    description: "Luxury custom homes engineered for the Florida coastline.",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2075",
+  },
+  {
+    icon: Layers,
+    title: "Remodels",
+    description: "High-end kitchen, bath, and whole-home transformations.",
+    image: "https://images.unsplash.com/photo-1556912177-859406b748ce?auto=format&fit=crop&q=80&w=2070",
+  },
+  {
+    icon: Maximize,
+    title: "Windows",
+    description: "Impact-rated window systems built for Florida conditions.",
+    image: "https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&q=80&w=2070",
+  },
+  {
+    icon: DoorOpen,
+    title: "Doors",
+    description: "Premium entry and sliding glass systems for indoor-outdoor living.",
+    image: "https://images.unsplash.com/photo-1506377247377-2a5b3b0ca7df?auto=format&fit=crop&q=80&w=2070",
+  },
+  {
+    icon: Truck,
+    title: "Site Prep",
+    description: "Expert clearing, grading, and site engineering for complex builds.",
+    image: "https://images.unsplash.com/photo-1541919329513-35f7af297129?auto=format&fit=crop&q=80&w=2070",
+  },
+  {
+    icon: Building2,
+    title: "Commercial",
+    description: "Structural services and build-outs for commercial environments.",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070",
+  },
+];
 
-const ServiceCard = ({ icon: Icon, title, description, image, index }: any) => (
-  <motion.div
-    initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    whileHover="hover"
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true }}
-    className="premium-card group relative"
-  >
-    <div className="aspect-[16/10] image-zoom-container relative border-b-2 border-brand-navy">
-      <div className="absolute inset-0 bg-brand-navy/40 group-hover:bg-brand-navy/10 transition-colors duration-700 z-10" />
-      <img src={image} alt={title} className="w-full h-full object-cover grayscale mix-blend-overlay group-hover:grayscale-0 group-hover:mix-blend-normal transition-all duration-700" />
-      <div className="absolute top-0 right-0 z-20">
-        <div className="bg-brand-navy px-4 py-2 font-mono text-[10px] text-white tracking-widest">S-0{index + 1}</div>
+const WorkSection = () => (
+  <section id="services" className="py-32 bg-brand-dark overflow-hidden relative">
+    <div className="absolute inset-0 industrial-grid opacity-20 pointer-events-none" />
+    <div className="max-w-[1400px] mx-auto px-6 relative z-10">
+      <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between border-b-2 border-white/5 pb-10">
+        <div>
+          <div className="technical-tag mb-6">Work Index</div>
+          <h3 className="text-5xl sm:text-8xl font-display font-black text-white tracking-tighter italic uppercase underline decoration-brand-orange/30 decoration-8 underline-offset-[-8px]">
+            OUR <br />
+            <span className="text-gradient-orange">WORK.</span>
+          </h3>
+        </div>
+        <div className="mt-8 md:mt-0 text-right">
+          <p className="text-brand-orange font-mono text-sm tracking-widest mb-2 font-bold">[ EST. 1997 ]</p>
+          <div className="w-48 h-1 bg-brand-orange ml-auto" />
+        </div>
       </div>
-      <div className="absolute bottom-8 left-8 z-20">
-        <motion.div 
-          variants={{
-            hover: { 
-              rotate: [0, -10, 10, 0],
-              scale: [1, 1.1, 1],
-              transition: { duration: 0.5, repeat: Infinity, repeatDelay: 1.5 }
-            }
-          }}
-          className="bg-brand-orange p-5 rounded-none shadow-[4px_4px_0px_rgba(11,19,48,1)] text-white group-hover:translate-x-1 group-hover:translate-y-1 group-hover:shadow-none transition-all duration-500"
-        >
-          <Icon size={32} />
-        </motion.div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {COMBINED_CARDS.map(({ icon: Icon, title, description, image }, i) => (
+          <motion.div
+            key={title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: i * 0.08 }}
+            viewport={{ once: true }}
+            className="group relative overflow-hidden bg-white/5 border border-white/10 hover:border-brand-orange transition-all duration-500"
+          >
+            <div className="aspect-[4/3] overflow-hidden relative">
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-brand-navy/40 group-hover:bg-brand-navy/10 transition-colors duration-700" />
+              <div className="absolute top-4 left-4 bg-brand-orange p-3 text-white shadow-[3px_3px_0px_rgba(11,19,48,1)]">
+                <Icon size={20} />
+              </div>
+            </div>
+            <div className="p-6">
+              <h4 className="text-white font-display font-black text-xl uppercase italic tracking-tighter mb-2 group-hover:text-brand-orange transition-colors">{title}</h4>
+              <p className="text-slate-400 font-mono text-xs leading-relaxed">{description}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      <div className="mt-16 text-center">
+        <button onClick={() => scrollTo('quote')} className="btn-primary px-16 py-5 text-base">GET A QUOTE</button>
       </div>
     </div>
-    <div className="p-12 relative z-10 bg-white">
-      <h3 className="text-4xl font-display font-black text-brand-navy mb-6 leading-[0.9] group-hover:text-brand-orange transition-colors uppercase italic tracking-tighter">{title}</h3>
-      <p className="text-slate-500 font-mono text-sm leading-relaxed mb-12 opacity-80 group-hover:opacity-100 transition-opacity duration-500 border-l border-brand-navy/10 pl-6">{description}</p>
-      <button onClick={() => scrollTo('quote')} className="btn-primary w-full text-sm">GET A QUOTE</button>
-    </div>
-  </motion.div>
+  </section>
 );
 
 // ─── Legal Page Sections ───────────────────────────────────────────────────────
@@ -494,16 +376,7 @@ export default function App() {
   const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
   const scale = useTransform(scrollY, [0, 1000], [1, 1.15]);
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<'home' | 'privacy' | 'terms'>('home');
-
-  const nextImage = useCallback(() => {
-    setSelectedImageIndex(prev => (prev === null ? 0 : (prev + 1) % IMAGES.gallery.length));
-  }, []);
-
-  const prevImage = useCallback(() => {
-    setSelectedImageIndex(prev => (prev === null ? 0 : (prev - 1 + IMAGES.gallery.length) % IMAGES.gallery.length));
-  }, []);
 
   if (currentPage === 'privacy') {
     return <LegalPage title="Privacy Policy" sections={PRIVACY_SECTIONS} onBack={() => setCurrentPage('home')} />;
@@ -516,14 +389,6 @@ export default function App() {
   return (
     <div className="min-h-screen gritty-overlay">
       <Navbar onNavigate={setCurrentPage} />
-
-      <Lightbox 
-        images={IMAGES.gallery}
-        index={selectedImageIndex}
-        onClose={() => setSelectedImageIndex(null)}
-        onNext={nextImage}
-        onPrev={prevImage}
-      />
 
       {/* Hero Section */}
       <section id="hero" className="relative min-h-[90vh] flex items-center pt-48 pb-32 overflow-hidden">
@@ -571,7 +436,8 @@ export default function App() {
                   <input type="text" placeholder="Project Zip Code" className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
                   <div className="flex items-start space-x-3 py-2">
                     <input type="checkbox" className="mt-1" id="terms" />
-<ConsentLabel htmlFor="terms" />                  </div>
+                    <ConsentLabel htmlFor="terms" />
+                  </div>
                   <button type="submit" className="btn-primary w-full py-5 text-lg">GET A QUOTE</button>
                 </form>
               </div>
@@ -616,33 +482,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-32 bg-brand-dark overflow-hidden relative">
-        <div className="absolute inset-0 industrial-grid opacity-20 pointer-events-none" />
-        <div className="max-w-[1400px] mx-auto px-6 relative z-10">
-          <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between border-b-2 border-white/5 pb-10">
-            <div>
-              <div className="technical-tag mb-6">Service Index</div>
-              <h3 className="text-5xl sm:text-8xl font-display font-black text-white tracking-tighter italic uppercase underline decoration-brand-orange/30 decoration-8 underline-offset-[-8px]">
-                BUILDING <br />
-                <span className="text-gradient-orange">SOLUTIONS.</span>
-              </h3>
-            </div>
-            <div className="mt-8 md:mt-0 text-right">
-              <p className="text-brand-orange font-mono text-sm tracking-widest mb-2 font-bold">[ EST. 1997 ]</p>
-              <div className="w-48 h-1 bg-brand-orange ml-auto" />
-            </div>
-          </div>
-          <div className="grid lg:grid-cols-3 gap-8">
-            <ServiceCard index={0} icon={Home} title="Custom Homes" description="Architectural excellence meet structural precision. We build luxury custom homes tailored to the Florida coastline." image={IMAGES.customHome} />
-            <ServiceCard index={1} icon={Layers} title="Remodels" description="From high-end kitchens to multi-room transformations, we strip back the old and engineer the new." image={IMAGES.remodel} />
-            <ServiceCard index={2} icon={Maximize} title="Windows" description="Impact-rated window systems designed for Florida's toughest conditions without sacrificing aesthetic." image={IMAGES.windows} />
-            <ServiceCard index={3} icon={DoorOpen} title="Doors" description="Premium entry systems and sliding glass walls that merge indoor and outdoor living seamlessly." image={IMAGES.doors} />
-            <ServiceCard index={4} icon={Truck} title="Site Prep" description="The foundation of every great build. Expert clearing, grading, and site engineering for complex projects." image={IMAGES.sitePrep} />
-            <ServiceCard index={5} icon={Building2} title="Commercial" description="Specialized structural services and build-outs for premium commercial environments." image={IMAGES.commercial} />
-          </div>
-        </div>
-      </section>
+      {/* Combined Work Section (Services + Gallery merged) */}
+      <WorkSection />
 
       {/* Why Choose Us */}
       <section className="py-32 bg-white overflow-hidden relative">
@@ -718,28 +559,6 @@ export default function App() {
                 <div key={city} className="service-area-badge py-5">{city}</div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery */}
-      <section id="gallery" className="py-32 bg-white overflow-hidden relative">
-        <div className="max-w-[1400px] mx-auto px-6 mb-20 text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }}>
-            <h2 className="text-brand-navy text-4xl sm:text-6xl font-display font-bold mb-6">See the Results for Yourself</h2>
-            <p className="text-slate-500 text-xl max-w-3xl mx-auto font-medium">We don't just talk about detail—we show it. Here are just a few kitchen remodels we've completed for local homeowners.</p>
-          </motion.div>
-        </div>
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {IMAGES.gallery.map((img, i) => (
-              <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: i * 0.1 }} viewport={{ once: true }} onClick={() => setSelectedImageIndex(i)} className="relative group overflow-hidden rounded-xl shadow-xl cursor-pointer aspect-video">
-                <img src={img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-brand-navy/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="bg-white/20 backdrop-blur-md p-4 rounded-full text-white"><Maximize size={24} /></div>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
@@ -825,7 +644,8 @@ export default function App() {
                 <textarea placeholder="Tell us about your project..." rows={4} className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg resize-none" />
                 <div className="flex items-start space-x-3 py-2">
                   <input type="checkbox" className="mt-1" id="terms2" />
-<ConsentLabel htmlFor="terms2" />                </div>
+                  <ConsentLabel htmlFor="terms2" />
+                </div>
                 <button type="submit" className="btn-primary w-full py-5 text-lg">GET A QUOTE</button>
               </form>
             </motion.div>
@@ -859,7 +679,7 @@ export default function App() {
             <div className="space-y-6">
               <p className="text-brand-navy font-bold uppercase text-[10px] tracking-[0.4em] mb-10">Quick Links</p>
               <button onClick={() => scrollTo('about')} className="block text-slate-500 hover:text-brand-orange transition-colors text-sm font-medium text-left">Our Story</button>
-              <button onClick={() => scrollTo('gallery')} className="block text-slate-500 hover:text-brand-orange transition-colors text-sm font-medium text-left">Our Portfolio</button>
+              <button onClick={() => scrollTo('services')} className="block text-slate-500 hover:text-brand-orange transition-colors text-sm font-medium text-left">Our Portfolio</button>
               <button onClick={() => scrollTo('quote')} className="block text-slate-500 hover:text-brand-orange transition-colors text-sm font-medium text-left">Financing</button>
               <button onClick={() => scrollTo('quote')} className="block text-slate-500 hover:text-brand-orange transition-colors text-sm font-medium text-left">Get a Quote</button>
             </div>
@@ -879,5 +699,3 @@ export default function App() {
     </div>
   );
 }
-
-
