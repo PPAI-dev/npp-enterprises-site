@@ -571,8 +571,7 @@ export default function App() {
                   <input type="text" placeholder="Project Zip Code" className="w-full bg-slate-50 border border-slate-200 p-4 text-slate-900 placeholder:text-slate-400 focus:border-brand-navy outline-none transition-colors rounded-lg" />
                   <div className="flex items-start space-x-3 py-2">
                     <input type="checkbox" className="mt-1" id="terms" />
-                    <ConsentLabel htmlFor="terms" onNavigate={setCurrentPage} />
-                  </div>
+<ConsentLabel htmlFor="terms" />                  </div>
                   <button type="submit" className="btn-primary w-full py-5 text-lg">GET A QUOTE</button>
                 </form>
               </div>
