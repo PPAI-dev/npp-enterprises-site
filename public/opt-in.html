@@ -57,9 +57,7 @@
       margin-bottom: 32px;
       line-height: 1.6;
     }
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
     label.field-label {
       display: block;
       font-size: 12px;
@@ -82,50 +80,67 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    input:focus {
-      border-color: #0b1330;
-      background: #fff;
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    input:focus { border-color: #0b1330; background: #fff; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .consent-box {
       background: #f8f9fa;
-      border: 1.5px solid #e2e8f0;
+      border: 2px solid #0b1330;
       border-radius: 8px;
-      padding: 16px;
+      padding: 20px;
       margin: 20px 0;
+    }
+    .consent-box h3 {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0b1330;
+      margin-bottom: 12px;
     }
     .consent-row {
       display: flex;
       align-items: flex-start;
       gap: 12px;
+      margin-bottom: 12px;
     }
     .consent-row input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       margin-top: 2px;
       flex-shrink: 0;
       cursor: pointer;
       accent-color: #f5a623;
     }
     .consent-text {
-      font-size: 11px;
-      color: #64748b;
-      line-height: 1.6;
+      font-size: 12px;
+      color: #334155;
+      line-height: 1.7;
     }
-    .consent-text a {
-      color: #0b1330;
-      text-decoration: underline;
-    }
+    .consent-text strong { color: #0b1330; }
+    .consent-text a { color: #0b1330; text-decoration: underline; }
     .consent-text a:hover { color: #f5a623; }
-    .optional-note {
+    .disclosure-list {
+      background: #f0f4ff;
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+    .disclosure-list p {
+      font-size: 11px;
+      color: #475569;
+      line-height: 1.8;
+    }
+    .optional-tag {
+      display: inline-block;
+      background: #dcfce7;
+      color: #166534;
       font-size: 10px;
-      color: #94a3b8;
-      margin-top: 6px;
-      font-style: italic;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
     .btn {
       width: 100%;
@@ -143,23 +158,15 @@
       margin-top: 8px;
     }
     .btn:hover { background: #f5a623; color: #0b1330; }
-    .divider {
-      border: none;
-      border-top: 1px solid #e2e8f0;
-      margin: 28px 0;
-    }
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 24px 0; }
     .info-block {
       background: #f0f4ff;
       border-left: 3px solid #0b1330;
       padding: 14px 16px;
       border-radius: 0 8px 8px 0;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
-    .info-block p {
-      font-size: 12px;
-      color: #475569;
-      line-height: 1.7;
-    }
+    .info-block p { font-size: 12px; color: #475569; line-height: 1.7; }
     .info-block strong { color: #0b1330; }
     .success-msg {
       display: none;
@@ -178,6 +185,7 @@
       padding: 32px 24px;
       font-size: 11px;
       color: #94a3b8;
+      line-height: 1.8;
     }
     @media (max-width: 480px) {
       .grid-2 { grid-template-columns: 1fr; }
@@ -198,7 +206,7 @@
     <div class="badge">SMS Opt-In</div>
     <h1>Stay Updated on Your Project</h1>
     <p class="subtitle">
-      Fill out the form below to receive SMS updates from NPP Enterprises, LLC regarding your construction project, consultations, and job status.
+      Fill out the form below to receive SMS updates from <strong>NPP ENTERPRISES, LLC</strong> regarding your construction project, consultations, and job status.
     </p>
 
     <div class="info-block">
@@ -233,18 +241,38 @@
       <hr class="divider" />
 
       <div class="consent-box">
+        <h3>SMS Message Consent — NPP Enterprises, LLC</h3>
         <div class="consent-row">
           <input type="checkbox" id="smsConsent" name="smsConsent" />
           <div>
             <label class="consent-text" for="smsConsent">
-              I agree to receive informational, transactional, and promotional SMS text messages from <strong>NPP ENTERPRISES, LLC</strong> at the phone number provided. Message frequency varies. Msg &amp; data rates may apply. This consent is not a condition of purchase. Reply <strong>STOP</strong> to unsubscribe at any time. Reply <strong>HELP</strong> for help.
+              I agree to receive <strong>informational and transactional SMS text messages</strong> from <strong>NPP ENTERPRISES, LLC</strong> at the phone number provided above. These messages may include project updates, appointment confirmations, job status notifications, and review requests.
               <br /><br />
-              Your phone number will not be shared with third parties for marketing purposes.
+              <strong>Message frequency varies</strong> based on project activity.
+              <br />
+              <strong>Msg &amp; data rates may apply.</strong>
               <br /><br />
-              <a href="/privacy-policy.html" target="_blank">Privacy Policy</a> &amp; <a href="/terms-of-service.html" target="_blank">Terms of Service</a>
+              To opt out at any time, reply <strong>STOP</strong> to any message.
+              To get help, reply <strong>HELP</strong>.
+              <br /><br />
+              Your phone number will <strong>not</strong> be shared with or sold to third parties for marketing purposes.
+              <br /><br />
+              <a href="/privacy-policy.html" target="_blank">Privacy Policy</a> &nbsp;|&nbsp; <a href="/terms-of-service.html" target="_blank">Terms of Service</a>
             </label>
-            <p class="optional-note">SMS consent is optional and not required to submit this form.</p>
+            <div class="optional-tag">Optional — not required to submit</div>
           </div>
+        </div>
+
+        <div class="disclosure-list">
+          <p>
+            <strong>Program:</strong> NPP Enterprises, LLC Project &amp; Service Updates<br />
+            <strong>Message types:</strong> Transactional and informational SMS<br />
+            <strong>Frequency:</strong> Varies based on project activity<br />
+            <strong>Cost:</strong> Msg &amp; data rates may apply<br />
+            <strong>Opt-out:</strong> Reply STOP to unsubscribe at any time<br />
+            <strong>Help:</strong> Reply HELP or contact andrewgrischow@nppent.com<br />
+            <strong>Not a condition of purchase.</strong> Consent is optional.
+          </p>
         </div>
       </div>
 
@@ -258,7 +286,9 @@
 
 <footer>
   © 2026 NPP Enterprises, LLC. Licensed &amp; Insured Construction. Florida Gulf Coast.<br />
-  Msg &amp; data rates may apply. Reply STOP to unsubscribe. Reply HELP for help.
+  SMS: Msg &amp; data rates may apply. Message frequency varies.<br />
+  Reply STOP to unsubscribe. Reply HELP for help.<br />
+  NPP ENTERPRISES, LLC will never sell your phone number to third parties.
 </footer>
 
 <script>
