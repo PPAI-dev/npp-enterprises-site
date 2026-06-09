@@ -78,7 +78,7 @@ const CustomCursor = () => {
 };
 
 const IMAGES = {
-  hero: "/Outdoor Project for NPP with waterway.JPG",
+  hero: "/outdoor-waterway.jpg",
 };
 
 const Logo = ({ className = "h-14 w-auto object-contain" }: { className?: string }) => (
@@ -196,12 +196,12 @@ const Navbar = ({ onNavigate }: { onNavigate: (page: 'home' | 'privacy' | 'terms
 
 // ─── Combined Work Section ─────────────────────────────────────────────────────
 const COMBINED_CARDS = [
-  { icon: Home, title: "Custom Homes", description: "Luxury custom homes engineered for the Florida coastline.", image: "/Outdoor Project for NPP with waterway.JPG" },
-  { icon: Layers, title: "Remodels", description: "High-end kitchen, bath, and whole-home transformations.", image: "/Custom kitchen being built. NPP.JPG" },
-  { icon: Maximize, title: "Windows", description: "Impact-rated window systems built for Florida conditions.", image: "/Outdoor PGT window for NPP.JPG" },
-  { icon: DoorOpen, title: "Doors", description: "Premium entry and sliding glass systems for indoor-outdoor living.", image: "/floor.jpeg" },
-  { icon: Truck, title: "Site Prep", description: "Expert clearing, grading, and site engineering for complex builds.", image: "/Another pre insulation.jpeg" },
-  { icon: Building2, title: "Commercial", description: "Structural services and build-outs for commercial environments.", image: "/Insulation for interior. NPP HOMES.jpeg" },
+  { icon: Home, title: "Custom Homes", description: "Luxury custom homes engineered for the Florida coastline.", image: "/outdoor-waterway.jpg" },
+  { icon: Layers, title: "Remodels", description: "High-end kitchen, bath, and whole-home transformations.", image: "/kitchen.jpg" },
+  { icon: Maximize, title: "Windows", description: "Impact-rated window systems built for Florida conditions.", image: "/windows.jpg" },
+  { icon: DoorOpen, title: "Doors", description: "Premium entry and sliding glass systems for indoor-outdoor living.", image: "/floor.jpg" },
+  { icon: Truck, title: "Site Prep", description: "Expert clearing, grading, and site engineering for complex builds.", image: "/insulation2.jpg" },
+  { icon: Building2, title: "Commercial", description: "Structural services and build-outs for commercial environments.", image: "/insulation-interior.jpg" },
 ];
 
 const WorkSection = () => (
@@ -533,7 +533,7 @@ export default function App() {
             </div>
             <div className="lg:col-span-5 relative h-[500px] lg:h-auto bg-slate-100 flex items-center justify-center overflow-hidden group">
               <div className="absolute inset-0 bg-brand-navy/20 z-10 group-hover:bg-transparent transition-colors duration-700" />
-              <img src="/Custom kitchen being built. NPP.JPG" alt="NPP Project" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" />
+              <img src="/kitchen.jpg" alt="NPP Project" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" />
               <div className="absolute bottom-8 right-8 z-20 text-white font-mono text-[10px] tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">NPP ENTERPRISES LLC</div>
             </div>
           </div>
@@ -572,7 +572,7 @@ export default function App() {
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative p-4">
               <div className="absolute inset-0 border-2 border-brand-navy -rotate-2" />
               <div className="absolute inset-0 bg-brand-orange/5 translate-x-4 translate-y-4 -z-10" />
-              <img src="/Outdoor Project for NPP with waterway.JPG" alt="NPP Enterprises Project" className="w-full h-full object-cover grayscale transition-transform duration-700 hover:grayscale-0 relative z-10" />
+              <img src="/outdoor-waterway.jpg" alt="NPP Enterprises Project" className="w-full h-full object-cover grayscale transition-transform duration-700 hover:grayscale-0 relative z-10" />
               <div className="absolute -bottom-8 -left-8 bg-brand-navy p-10 shadow-[10px_10px_0px_rgba(245,166,35,1)] z-20">
                 <p className="text-brand-orange text-7xl font-display font-black leading-none mb-2">27+</p>
                 <p className="text-white font-mono font-bold uppercase text-[9px] tracking-[.3em]">Operational Years</p>
